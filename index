@@ -1,0 +1,494 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GCIS — Global Chromatic Identity State</title>
+  <meta name="description" content="GCIS is the open harmonic state standard for music applications. One file format to synchronize root, mode, scale, and active notes across any music tool." />
+  <meta name="author" content="Benjamin Ryan — Keys, Codes & Modes™" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gcis.keyscodesandmodes.com" />
+  <meta property="og:title" content="GCIS — Global Chromatic Identity State" />
+  <meta property="og:description" content="The open harmonic state standard for music applications." />
+  <meta property="og:url" content="https://gcis.keyscodesandmodes.com" />
+  <meta property="og:type" content="website" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","name":"GCIS — Global Chromatic Identity State","description":"Open harmonic state standard for music applications","author":{"@type":"Person","name":"Benjamin Ryan"},"publisher":{"@type":"Organization","name":"Keys, Codes & Modes™"},"url":"https://gcis.keyscodesandmodes.com","version":"1.0"}</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:#0a0a15; --panel:#0f0f1e; --elev:#141428;
+      --teal:#008080; --tl:#00c0c0; --gold:#F4D03F;
+      --purple:#8B6BA3; --coral:#CF7A5A; --green:#00e08a; --red:#ff4455;
+      --text:#e8e8f8; --text2:#b0b0cc; --muted:#5a5a7a;
+      --border:rgba(0,128,128,0.18);
+      --fd:'Cinzel',serif; --fb:'Montserrat',sans-serif; --fm:'JetBrains Mono',monospace;
+      --C:#FFFF00;--Cs:#FFC400;--D:#FF8000;--Ds:#FF4000;
+      --E:#FF0000;--F:#C4007F;--Fs:#8000FF;--G:#4000FF;
+      --Gs:#0000FF;--A:#007FFF;--As:#00FF80;--B:#80FF00;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
+    a{color:var(--tl);text-decoration:none;transition:color .2s;}
+    a:hover{color:var(--gold);}
+    :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    /* Nav */
+    nav{position:sticky;top:0;z-index:100;background:rgba(10,10,21,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem;}
+    .nav-brand{display:flex;align-items:center;gap:.75rem;font-family:var(--fd);font-size:1.05rem;font-weight:600;color:var(--text);letter-spacing:.04em;}
+    .nav-wheel{width:32px;height:32px;border-radius:50%;flex-shrink:0;background:conic-gradient(from -15deg,var(--C) 0 30deg,var(--Cs) 30deg 60deg,var(--D) 60deg 90deg,var(--Ds) 90deg 120deg,var(--E) 120deg 150deg,var(--F) 150deg 180deg,var(--Fs) 180deg 210deg,var(--G) 210deg 240deg,var(--Gs) 240deg 270deg,var(--A) 270deg 300deg,var(--As) 300deg 330deg,var(--B) 330deg 360deg);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--teal);}
+    .nav-links{display:flex;gap:.25rem;}
+    .nav-links a{padding:.4rem .9rem;border-radius:6px;font-size:.82rem;font-weight:500;color:var(--text2);transition:all .15s;}
+    .nav-links a:hover{color:var(--tl);background:rgba(0,128,128,.08);}
+    .nav-badge{font-family:var(--fm);font-size:.7rem;color:var(--tl);background:rgba(0,128,128,.12);border:1px solid rgba(0,128,128,.3);border-radius:4px;padding:.2rem .55rem;letter-spacing:.06em;}
+
+    /* Chromatic strip */
+    .chrom{display:flex;height:4px;}
+    .chrom span{flex:1;}
+
+    /* Hero */
+    .hero{max-width:900px;margin:0 auto;padding:5rem 2rem 4rem;text-align:center;}
+    .eyebrow{font-family:var(--fm);font-size:.75rem;color:var(--tl);letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+    .eyebrow::before,.eyebrow::after{content:'';flex:1;max-width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--teal));}
+    .eyebrow::after{background:linear-gradient(90deg,var(--teal),transparent);}
+    .hero h1{font-family:var(--fd);font-size:clamp(3rem,10vw,6rem);font-weight:900;letter-spacing:.06em;background:linear-gradient(135deg,var(--gold) 0%,var(--tl) 60%,var(--purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.05;margin-bottom:.75rem;}
+    .hero-sub{font-family:var(--fd);font-size:clamp(1rem,2.5vw,1.35rem);color:var(--text2);margin-bottom:2rem;letter-spacing:.03em;}
+    .hero-desc{font-size:1rem;color:var(--text2);max-width:580px;margin:0 auto 2.5rem;line-height:1.8;}
+    .hero-desc strong{color:var(--gold);}
+    .cta{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;}
+    .btn{padding:.72rem 1.6rem;border-radius:8px;font-family:var(--fb);font-size:.86rem;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.04em;border:none;display:inline-flex;align-items:center;gap:.4rem;}
+    .btn-p{background:linear-gradient(135deg,var(--teal),#005f5f);color:#fff;box-shadow:0 4px 16px rgba(0,128,128,.3);}
+    .btn-p:hover{box-shadow:0 6px 24px rgba(0,128,128,.5);transform:translateY(-1px);color:#fff;}
+    .btn-o{background:transparent;color:var(--gold);border:1px solid rgba(244,208,63,.4);}
+    .btn-o:hover{background:rgba(244,208,63,.08);border-color:var(--gold);color:var(--gold);}
+
+    /* Sections */
+    section{padding:4rem 2rem;}
+    section:nth-child(even){background:var(--panel);}
+    .inner{max-width:960px;margin:0 auto;}
+    .slabel{font-family:var(--fm);font-size:.7rem;font-weight:500;color:var(--tl);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.6rem;}
+    .stitle{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2.1rem);font-weight:700;color:var(--text);margin-bottom:1rem;line-height:1.2;}
+    .sdesc{font-size:1rem;color:var(--text2);max-width:620px;line-height:1.75;margin-bottom:2.5rem;}
+
+    /* Why grid */
+    .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;}
+    .why-card{background:var(--elev);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:all .2s;}
+    .why-card:hover{border-color:rgba(0,128,128,.4);transform:translateY(-2px);}
+    .wi{font-size:1.5rem;margin-bottom:.75rem;}
+    .wt{font-family:var(--fd);font-size:.88rem;font-weight:600;color:var(--gold);margin-bottom:.4rem;}
+    .wd{font-size:.82rem;color:var(--text2);line-height:1.65;}
+
+    /* Spec */
+    .spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+    @media(max-width:700px){.spec-grid{grid-template-columns:1fr;}}
+    .spec-blk{background:var(--elev);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+    .spec-hd{padding:.65rem 1rem;background:rgba(0,128,128,.06);border-bottom:1px solid var(--border);font-family:var(--fm);font-size:.72rem;color:var(--tl);letter-spacing:.1em;}
+    .spec-blk pre{padding:1rem;font-family:var(--fm);font-size:.76rem;color:var(--text2);line-height:1.7;overflow-x:auto;white-space:pre;}
+    .k{color:var(--purple);} .s{color:var(--tl);} .n{color:var(--gold);} .c{color:var(--muted);font-style:italic;}
+    .ftable{width:100%;border-collapse:collapse;font-size:.82rem;}
+    .ftable th{text-align:left;padding:.55rem .7rem;font-family:var(--fm);font-size:.65rem;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+    .ftable td{padding:.55rem .7rem;border-bottom:1px solid rgba(0,128,128,.07);vertical-align:top;}
+    .ftable tr:last-child td{border-bottom:none;}
+    .fk{font-family:var(--fm);color:var(--tl);font-size:.76rem;}
+    .ft{font-family:var(--fm);color:var(--purple);font-size:.72rem;}
+    .fr{font-size:.7rem;color:var(--green);font-weight:600;}
+    .fo{font-size:.7rem;color:var(--muted);}
+    .fd{color:var(--text2);font-size:.8rem;}
+
+    /* Pitch & modes */
+    .pitch-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:.5rem;}
+    .pdot{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.66rem;font-weight:700;}
+    .modes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.6rem;margin-top:.5rem;}
+    .mcard{background:var(--elev);border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;}
+    .mn{font-family:var(--fm);font-size:.8rem;color:var(--tl);margin-bottom:2px;}
+    .ma{font-size:.7rem;color:var(--muted);margin-bottom:4px;}
+    .mi{font-family:var(--fm);font-size:.68rem;color:var(--text2);}
+
+    /* Validator */
+    .vwrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem;}
+    @media(max-width:700px){.vwrap{grid-template-columns:1fr;}}
+    .vpanel{background:var(--elev);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+    .vhd{padding:.65rem 1rem;background:rgba(0,128,128,.06);border-bottom:1px solid var(--border);font-family:var(--fm);font-size:.72rem;color:var(--tl);letter-spacing:.1em;display:flex;align-items:center;justify-content:space-between;}
+    .vbody{padding:1rem;}
+    .dz{border:2px dashed rgba(0,128,128,.3);border-radius:8px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;margin-bottom:.75rem;}
+    .dz:hover,.dz.over{border-color:var(--tl);background:rgba(0,128,128,.05);}
+    .dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    textarea{width:100%;min-height:170px;resize:vertical;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.7rem;font-family:var(--fm);font-size:.74rem;color:var(--tl);line-height:1.6;outline:none;transition:border-color .2s;}
+    textarea:focus{border-color:var(--tl);}
+    textarea::placeholder{color:var(--muted);}
+    .vbtn{width:100%;margin-top:.6rem;padding:.62rem;background:linear-gradient(135deg,var(--teal),#005f5f);border:none;border-radius:8px;font-family:var(--fd);font-size:.78rem;font-weight:600;color:#fff;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;transition:all .15s;}
+    .vbtn:hover{box-shadow:0 0 20px rgba(0,128,128,.4);}
+    .vclear{width:100%;margin-top:.35rem;padding:.42rem;background:transparent;border:1px solid rgba(255,255,255,.07);border-radius:8px;font-family:var(--fb);font-size:.74rem;color:var(--muted);cursor:pointer;transition:all .15s;}
+    .vclear:hover{color:var(--text2);}
+    .rempty{padding:2rem;text-align:center;color:var(--muted);font-size:.82rem;line-height:1.7;}
+    .sbanner{display:flex;align-items:center;gap:.6rem;padding:.72rem 1rem;font-family:var(--fd);font-size:.78rem;font-weight:600;letter-spacing:.05em;border-bottom:1px solid var(--border);}
+    .sbanner.ok{color:var(--green);background:rgba(0,224,138,.05);}
+    .sbanner.bad{color:var(--red);background:rgba(255,68,85,.05);}
+    .diag{padding:.7rem 1rem;border-bottom:1px solid var(--border);font-size:.78rem;}
+    .diag:last-child{border-bottom:none;}
+    .dlabel{font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
+    .kv2{display:flex;gap:.5rem;margin-bottom:.28rem;align-items:center;}
+    .kv2:last-child{margin-bottom:0;}
+    .kvk{font-family:var(--fm);font-size:.7rem;color:var(--text2);width:78px;flex-shrink:0;}
+    .kvv{font-family:var(--fm);font-size:.76rem;color:var(--tl);flex:1;}
+    .eline{font-family:var(--fm);font-size:.73rem;color:var(--red);background:rgba(255,68,85,.07);border-radius:5px;padding:.35rem .55rem;margin-bottom:4px;}
+    .wline{font-family:var(--fm);font-size:.73rem;color:var(--gold);margin-bottom:4px;}
+    .sbar{display:flex;gap:3px;flex-wrap:wrap;margin-top:.4rem;}
+    .sn{width:29px;height:29px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.58rem;font-weight:700;}
+    .trow{display:flex;align-items:center;gap:.6rem;padding:.38rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.77rem;cursor:pointer;}
+    .trow:last-child{border-bottom:none;}
+    .trow:hover .tname{color:var(--tl);}
+    .tname{flex:1;color:var(--text2);}
+    .tpass{font-family:var(--fm);font-size:.7rem;color:var(--green);}
+    .tfail{font-family:var(--fm);font-size:.7rem;color:var(--red);}
+    .tsum{font-family:var(--fm);font-size:.7rem;text-align:right;padding-top:.45rem;}
+
+    /* Downloads */
+    .dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;}
+    .dl-card{background:var(--elev);border:1px solid var(--border);border-radius:12px;padding:1.2rem;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:.45rem;}
+    .dl-card:hover{border-color:var(--tl);transform:translateY(-2px);}
+    .dli{font-size:1.4rem;}
+    .dln{font-family:var(--fd);font-size:.83rem;color:var(--gold);font-weight:600;}
+    .dlt{font-family:var(--fm);font-size:.66rem;color:var(--tl);margin-top:auto;}
+
+    /* Implementors */
+    .icard{background:var(--elev);border:1px solid var(--border);border-radius:12px;padding:1.4rem;display:flex;align-items:center;gap:1.25rem;}
+    .ilogo{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+    .iname{font-family:var(--fd);font-size:.92rem;color:var(--text);font-weight:600;margin-bottom:.2rem;}
+    .idesc{font-size:.8rem;color:var(--text2);}
+    .ibadge{font-family:var(--fm);font-size:.66rem;padding:.12rem .4rem;border-radius:4px;margin-left:.4rem;background:rgba(0,128,128,.15);color:var(--tl);border:1px solid rgba(0,128,128,.3);}
+
+    /* Footer */
+    footer{background:var(--panel);border-top:2px solid var(--teal);padding:2.5rem 2rem;text-align:center;color:var(--muted);font-size:.78rem;line-height:2;}
+    footer strong{color:var(--gold);}
+    footer a{color:var(--text2);}
+    footer a:hover{color:var(--gold);}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .fi{animation:fadeUp .35s ease forwards;}
+    @media(max-width:600px){.nav-links{display:none;}section{padding:3rem 1.25rem;}.hero{padding:3rem 1.25rem 2.5rem;}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand"><div class="nav-wheel" aria-hidden="true"></div>GCIS</div>
+  <div class="nav-links">
+    <a href="#spec">Spec</a>
+    <a href="#validator">Validator</a>
+    <a href="#downloads">Downloads</a>
+    <a href="#implementors">Implementors</a>
+    <a href="https://console.keyscodesandmodes.com">KCM Console ↗</a>
+  </div>
+  <span class="nav-badge">v1.0</span>
+</nav>
+
+<div class="chrom" aria-hidden="true">
+  <span style="background:var(--C)"></span><span style="background:var(--Cs)"></span>
+  <span style="background:var(--D)"></span><span style="background:var(--Ds)"></span>
+  <span style="background:var(--E)"></span><span style="background:var(--F)"></span>
+  <span style="background:var(--Fs)"></span><span style="background:var(--G)"></span>
+  <span style="background:var(--Gs)"></span><span style="background:var(--A)"></span>
+  <span style="background:var(--As)"></span><span style="background:var(--B)"></span>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Global Chromatic Identity State</div>
+  <h1>GCIS</h1>
+  <p class="hero-sub">The open harmonic state standard for music applications</p>
+  <p class="hero-desc">One file. One format. <strong>Root, mode, scale, and active notes</strong> — portable across any music tool, any platform, any AI. Created by Benjamin Ryan · Keys, Codes &amp; Modes™</p>
+  <div class="cta">
+    <a href="#validator" class="btn btn-p">▶ Validate a File</a>
+    <a href="#downloads" class="btn btn-o">⬇ Download Examples</a>
+    <a href="#spec" class="btn btn-o">📖 Read the Spec</a>
+  </div>
+</div>
+
+<section>
+  <div class="inner">
+    <div class="slabel">Why</div>
+    <h2 class="stitle">Music tools don't speak the same language.<br>GCIS changes that.</h2>
+    <p class="sdesc">Every DAW, every theory app, every AI music generator has its own internal state. GCIS is the universal envelope that lets them share a harmonic context instantly.</p>
+    <div class="why-grid">
+      <div class="why-card"><div class="wi">🎯</div><div class="wt">Single Source of Truth</div><div class="wd">Root, mode, scale intervals, and active MIDI notes in one validated JSON envelope. No ambiguity, no drift.</div></div>
+      <div class="why-card"><div class="wi">🔁</div><div class="wt">Portable Across Tools</div><div class="wd">Save a session in the KCM Console. Load it in Ableton, MuseScore, or any AI generator that reads GCIS. One click.</div></div>
+      <div class="why-card"><div class="wi">🏫</div><div class="wt">Built for Education</div><div class="wd">Teachers save harmonic contexts as .gcis files. Students load them and immediately see and hear the same musical state.</div></div>
+      <div class="why-card"><div class="wi">🤖</div><div class="wt">AI-Ready</div><div class="wd">GCIS gives AI music tools a structured harmonic prompt. "Generate in G Dorian" is now a file, not a guess.</div></div>
+      <div class="why-card"><div class="wi">✅</div><div class="wt">Validated at Format Level</div><div class="wd">The spec enforces KCM modal vocabulary. "major" is not a mode. "H" is not a note. The validator catches it instantly.</div></div>
+      <div class="why-card"><div class="wi">🔓</div><div class="wt">Human-Readable</div><div class="wd">Plain JSON. Open any .gcis file in a text editor and read it. Change the root by hand. Load it back. It just works.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="spec">
+  <div class="inner">
+    <div class="slabel">Specification</div>
+    <h2 class="stitle">GCIS v1.0 — File Format Reference</h2>
+    <p class="sdesc">A .gcis file is a UTF-8 encoded JSON document with a versioned envelope. The <code style="font-family:var(--fm);color:var(--tl)">state</code> object is the canonical harmonic snapshot.</p>
+    <div class="spec-grid">
+      <div class="spec-blk">
+        <div class="spec-hd">Complete example — G Dorian</div>
+        <pre id="ex-json"></pre>
+      </div>
+      <div class="spec-blk">
+        <div class="spec-hd">Field reference</div>
+        <table class="ftable">
+          <thead><tr><th>Field</th><th>Type</th><th>Req</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="fk">gcis</td><td class="ft">string</td><td class="fr">✅</td><td class="fd">Format version — always "1.0"</td></tr>
+            <tr><td class="fk">state.root</td><td class="ft">string</td><td class="fr">✅</td><td class="fd">Pitch class — one of 12 valid values</td></tr>
+            <tr><td class="fk">state.mode</td><td class="ft">string</td><td class="fr">✅</td><td class="fd">Modal name — one of 7 valid values</td></tr>
+            <tr><td class="fk">state.scale</td><td class="ft">int[]</td><td class="fr">✅</td><td class="fd">7 semitone intervals from root</td></tr>
+            <tr><td class="fk">state.activeNotes</td><td class="ft">int[]</td><td class="fr">✅</td><td class="fd">MIDI note numbers — sorted, may be empty</td></tr>
+            <tr><td class="fk">title</td><td class="ft">string</td><td class="fo">—</td><td class="fd">Human-readable session name</td></tr>
+            <tr><td class="fk">author</td><td class="ft">string</td><td class="fo">—</td><td class="fd">Creator name</td></tr>
+            <tr><td class="fk">created</td><td class="ft">string</td><td class="fo">—</td><td class="fd">ISO 8601 timestamp</td></tr>
+            <tr><td class="fk">app</td><td class="ft">object</td><td class="fo">—</td><td class="fd">Originating app: name, version, url</td></tr>
+            <tr><td class="fk">history</td><td class="ft">array</td><td class="fo">—</td><td class="fd">Reserved — session recording (v1.1)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="margin-top:2rem;">
+      <div class="slabel" style="margin-bottom:.5rem;">Valid Pitch Classes (state.root)</div>
+      <div class="pitch-grid" id="pitch-grid"></div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:.5rem;font-family:var(--fm);">Sharp notation canonical. Enharmonic flats not accepted (use C# not Db).</p>
+    </div>
+    <div style="margin-top:2rem;">
+      <div class="slabel" style="margin-bottom:.5rem;">Valid Modes (state.mode)</div>
+      <div class="modes-grid" id="modes-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section id="validator">
+  <div class="inner">
+    <div class="slabel">Validator</div>
+    <h2 class="stitle">Validate a .gcis File</h2>
+    <p class="sdesc">Drop a file, paste JSON, or click a test case. Get a full diagnostic readout instantly.</p>
+    <div class="vwrap">
+      <div>
+        <div class="vpanel">
+          <div class="vhd">Input</div>
+          <div class="vbody">
+            <div class="dz" id="dz">
+              <input type="file" accept=".gcis,application/json" id="fi" />
+              <div style="font-size:1.4rem;margin-bottom:.3rem;">⬆</div>
+              <div style="font-size:.8rem;color:var(--text2);"><strong style="color:var(--tl);">Drop .gcis file</strong> or click to browse</div>
+            </div>
+            <textarea id="ji" placeholder="Paste .gcis JSON here…&#10;(Cmd/Ctrl+Enter to validate)" spellcheck="false"></textarea>
+            <button class="vbtn" id="vbtn">Validate</button>
+            <button class="vclear" id="cbtn">Clear</button>
+          </div>
+        </div>
+        <div class="vpanel" style="margin-top:1rem;">
+          <div class="vhd">Built-in Tests <span id="tscore" style="margin-left:auto;font-size:.7rem;"></span></div>
+          <div style="padding:.5rem;" id="tsuite"></div>
+        </div>
+      </div>
+      <div class="vpanel" id="rpanel">
+        <div class="vhd">Diagnostic Readout</div>
+        <div id="rbody"><div class="rempty">Drop a .gcis file or paste JSON<br>to see the diagnostic readout.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="downloads">
+  <div class="inner">
+    <div class="slabel">Downloads</div>
+    <h2 class="stitle">Example .gcis Files</h2>
+    <p class="sdesc">Download these to test your implementation or use as starting points. Each is a fully valid GCIS v1.0 document.</p>
+    <div class="dl-grid" id="dlgrid"></div>
+  </div>
+</section>
+
+<section id="implementors">
+  <div class="inner">
+    <div class="slabel">Implementors</div>
+    <h2 class="stitle">Apps that speak GCIS</h2>
+    <p class="sdesc">The reference implementation is the KCM Console. Want your app listed? Implement the spec, validate with the tool above, and get in touch.</p>
+    <div style="display:flex;flex-direction:column;gap:.75rem;">
+      <div class="icard">
+        <div class="ilogo" style="background:rgba(0,128,128,.15);">🎵</div>
+        <div>
+          <div class="iname">KCM Console <span class="ibadge">Reference Implementation</span></div>
+          <div class="idesc">Save and load .gcis from the Console header. Three panels — Music Theory Pro, Circle of Fifths, Modal Stencil — all sync from a single .gcis file. <a href="https://console.keyscodesandmodes.com">console.keyscodesandmodes.com ↗</a></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1.5rem;padding:1.25rem;background:var(--elev);border:1px dashed rgba(0,128,128,.3);border-radius:12px;text-align:center;">
+      <p style="color:var(--text2);font-size:.84rem;margin-bottom:.75rem;">Building a GCIS-compatible app?</p>
+      <a href="mailto:ben@keyscodesandmodes.com?subject=GCIS Implementation" class="btn btn-o" style="font-size:.78rem;">Contact to get listed ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="nav-wheel" style="margin:0 auto .75rem;width:36px;height:36px;" aria-hidden="true"></div>
+  <p><strong>GCIS — Global Chromatic Identity State</strong> · Version 1.0</p>
+  <p>Created by <strong>Benjamin Ryan</strong> · <a href="https://keyscodesandmodes.com">Keys, Codes &amp; Modes™</a></p>
+  <p>12-Color Chromatic Spectrum™ · FreeStyle® Musical Device (4 US Patents)</p>
+  <p style="margin-top:.5rem;"><a href="https://console.keyscodesandmodes.com">KCM Console</a> · <a href="https://keyscodesandmodes.com">Main Site</a> · <a href="mailto:ben@keyscodesandmodes.com">Contact</a></p>
+</footer>
+
+<script>
+'use strict';
+const PITCH=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const MODES={ionian:{i:[0,2,4,5,7,9,11],a:'Major'},dorian:{i:[0,2,3,5,7,9,10],a:''},phrygian:{i:[0,1,3,5,7,8,10],a:''},lydian:{i:[0,2,4,6,7,9,11],a:''},mixolydian:{i:[0,2,4,5,7,9,10],a:'Dominant'},aeolian:{i:[0,2,3,5,7,8,10],a:'Natural Minor'},locrian:{i:[0,1,3,5,6,8,10],a:''}};
+const COLORS={'C':'#FFFF00','C#':'#FFC400','D':'#FF8000','D#':'#FF4000','E':'#FF0000','F':'#C4007F','F#':'#8000FF','G':'#4000FF','G#':'#0000FF','A':'#007FFF','A#':'#00FF80','B':'#80FF00'};
+const DARK=new Set(['C','C#','D','A#','B']);
+const nc=n=>COLORS[n]||'#888', ink=n=>DARK.has(n)?'#000':'#fff';
+const bn=(root,ivs)=>{const ri=PITCH.indexOf(root);return ri===-1?[]:ivs.map(iv=>PITCH[(ri+iv)%12]);};
+
+/* Spec rendering */
+document.getElementById('ex-json').innerHTML=`{
+  <span class="k">"gcis"</span>:    <span class="s">"1.0"</span>,
+  <span class="k">"created"</span>: <span class="s">"2026-04-25T14:30:00.000Z"</span>,
+  <span class="k">"title"</span>:   <span class="s">"G Dorian — Session 1"</span>,
+  <span class="k">"author"</span>:  <span class="s">"Benjamin Ryan"</span>,
+  <span class="k">"app"</span>: {
+    <span class="k">"name"</span>:    <span class="s">"KCM Console"</span>,
+    <span class="k">"version"</span>: <span class="s">"0.8.0"</span>,
+    <span class="k">"url"</span>:     <span class="s">"https://console.keyscodesandmodes.com"</span>
+  },
+  <span class="k">"state"</span>: {
+    <span class="k">"root"</span>:        <span class="s">"G"</span>,
+    <span class="k">"mode"</span>:        <span class="s">"dorian"</span>,
+    <span class="k">"scale"</span>:       [<span class="n">0</span>,<span class="n">2</span>,<span class="n">3</span>,<span class="n">5</span>,<span class="n">7</span>,<span class="n">9</span>,<span class="n">10</span>],
+    <span class="k">"activeNotes"</span>: [<span class="n">67</span>,<span class="n">71</span>,<span class="n">74</span>]
+  },
+  <span class="k">"history"</span>: []
+}`;
+
+const pg=document.getElementById('pitch-grid');
+PITCH.forEach(n=>{pg.innerHTML+=`<div class="pdot" style="background:${nc(n)};color:${ink(n)}">${n}</div>`;});
+
+const mg=document.getElementById('modes-grid');
+Object.entries(MODES).forEach(([k,v])=>{mg.innerHTML+=`<div class="mcard"><div class="mn">${k}</div>${v.a?`<div class="ma">${v.a}</div>`:''}<div class="mi">[${v.i.join(', ')}]</div></div>`;});
+
+/* Validator */
+function validate(doc){
+  const e=[],w=[];
+  if(!doc||typeof doc!=='object') return{ok:false,e:['Not a valid JSON object'],w};
+  if(!doc.gcis) e.push('Missing required field: gcis');
+  else if(doc.gcis!=='1.0') w.push('gcis version "'+doc.gcis+'" — current is "1.0"');
+  if(!doc.state){e.push('Missing required field: state');return{ok:false,e,w};}
+  const s=doc.state;
+  if(!s.root) e.push('Missing state.root');
+  else if(!PITCH.includes(s.root)) e.push('Invalid state.root "'+s.root+'" — valid: '+PITCH.join(', '));
+  if(!s.mode) e.push('Missing state.mode');
+  else if(!MODES[s.mode]) e.push('Invalid state.mode "'+s.mode+'" — valid: '+Object.keys(MODES).join(', '));
+  if(!Array.isArray(s.scale)) e.push('state.scale must be an array');
+  else{
+    if(s.scale.length!==7) w.push('state.scale has '+s.scale.length+' elements — expected 7');
+    if(s.mode&&MODES[s.mode]&&JSON.stringify(s.scale)!==JSON.stringify(MODES[s.mode].i))
+      w.push('scale mismatch for "'+s.mode+'" — expected ['+MODES[s.mode].i.join(',')+']');
+  }
+  if(!Array.isArray(s.activeNotes)) e.push('state.activeNotes must be an array');
+  if(!doc.title) w.push('Optional field missing: title');
+  if(!doc.author) w.push('Optional field missing: author');
+  return{ok:e.length===0,e,w};
+}
+
+function renderResults(jsonStr){
+  const body=document.getElementById('rbody');
+  body.innerHTML='';
+  let doc;
+  try{doc=JSON.parse(jsonStr);}
+  catch(err){body.innerHTML=`<div class="sbanner bad fi">✗ JSON Parse Error</div><div class="diag"><div class="eline">${err.message}</div></div>`;return;}
+  const{ok,e,w}=validate(doc);const s=doc.state||{};
+  body.innerHTML=`<div class="sbanner ${ok?'ok':'bad'} fi">${ok?'✓ Valid GCIS v1.0':'✗ Invalid — '+e.length+' error'+(e.length!==1?'s':'')}</div>`;
+  if(e.length){let h='<div class="diag fi"><div class="dlabel">Errors</div>';e.forEach(x=>{h+=`<div class="eline">✗ ${x}</div>`;});h+='</div>';body.innerHTML+=h;}
+  if(w.length){let h='<div class="diag fi"><div class="dlabel">Warnings</div>';w.forEach(x=>{h+=`<div class="wline">⚠ ${x}</div>`;});h+='</div>';body.innerHTML+=h;}
+  let meta='<div class="diag fi"><div class="dlabel">Metadata</div>';
+  [['gcis',doc.gcis||'—'],['title',doc.title||'—'],['author',doc.author||'—'],
+   ['created',(doc.created||'—').replace('T',' ').replace(/\.\d+Z/,' UTC')],
+   ['app',doc.app?doc.app.name+' v'+doc.app.version:'—']
+  ].forEach(([k,v])=>{meta+=`<div class="kv2"><span class="kvk">${k}</span><span class="kvv">${v}</span></div>`;});
+  meta+='</div>';body.innerHTML+=meta;
+  if(s.root||s.mode){
+    const rc=nc(s.root||''),ri=ink(s.root||'');
+    let st='<div class="diag fi"><div class="dlabel">Harmonic State</div>';
+    st+=`<div class="kv2"><span class="kvk">root</span><span class="kvv" style="display:flex;align-items:center;gap:5px;"><span style="width:22px;height:22px;border-radius:4px;background:${rc};color:${ri};display:inline-flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.58rem;font-weight:700;">${s.root||'?'}</span>${s.root||'—'} ${PITCH.includes(s.root)?'✅':'❌'}</span></div>`;
+    st+=`<div class="kv2"><span class="kvk">mode</span><span class="kvv">${s.mode||'—'} ${MODES[s.mode]?'✅':'❌'}</span></div>`;
+    if(Array.isArray(s.scale)&&s.scale.length&&s.root&&PITCH.includes(s.root)){
+      const notes=bn(s.root,s.scale);
+      st+='<div style="margin-top:.45rem;"><div class="dlabel">Scale</div><div class="sbar">';
+      notes.forEach(n=>{st+=`<div class="sn" style="background:${nc(n)};color:${ink(n)}">${n}</div>`;});
+      st+='</div></div>';
+    }
+    st+=`<div class="kv2" style="margin-top:.35rem;"><span class="kvk">activeNotes</span><span class="kvv">${Array.isArray(s.activeNotes)?(s.activeNotes.length?s.activeNotes.join(', '):'empty ✅'):'❌'}</span></div>`;
+    st+='</div>';body.innerHTML+=st;
+  }
+}
+
+/* Tests */
+const TESTS=[
+  {name:'Valid — G Dorian',expect:true,j:{gcis:'1.0',title:'G Dorian',author:'Test',created:new Date().toISOString(),app:{name:'KCM Console',version:'0.8.0',url:''},state:{root:'G',mode:'dorian',scale:[0,2,3,5,7,9,10],activeNotes:[]},history:[]}},
+  {name:'Valid — C Ionian + notes',expect:true,j:{gcis:'1.0',state:{root:'C',mode:'ionian',scale:[0,2,4,5,7,9,11],activeNotes:[60,64,67]}}},
+  {name:'Valid — E♭ Lydian (D#)',expect:true,j:{gcis:'1.0',state:{root:'D#',mode:'lydian',scale:[0,2,4,6,7,9,11],activeNotes:[]}}},
+  {name:'Invalid root — "H"',expect:false,j:{gcis:'1.0',state:{root:'H',mode:'ionian',scale:[0,2,4,5,7,9,11],activeNotes:[]}}},
+  {name:'Invalid mode — "major"',expect:false,j:{gcis:'1.0',state:{root:'C',mode:'major',scale:[0,2,4,5,7,9,11],activeNotes:[]}}},
+  {name:'Missing state field',expect:false,j:{gcis:'1.0',title:'No state'}},
+  {name:'Corrupt JSON',expect:false,raw:'{ not valid json !!!'},
+];
+function runTests(){
+  const suite=document.getElementById('tsuite');suite.innerHTML='';let passed=0;
+  TESTS.forEach(t=>{
+    const jstr=t.raw||JSON.stringify(t.j);
+    let ok;try{ok=validate(JSON.parse(jstr)).ok;}catch(e){ok=false;}
+    const pass=ok===t.expect;if(pass)passed++;
+    const row=document.createElement('div');row.className='trow';
+    row.innerHTML=`<span class="tname">${t.name}</span><span class="${pass?'tpass':'tfail'}">${pass?'✅ PASS':'❌ FAIL'}</span>`;
+    row.onclick=()=>{document.getElementById('ji').value=t.raw||JSON.stringify(t.j,null,2);renderResults(jstr);document.getElementById('rpanel').scrollIntoView({behavior:'smooth'});};
+    suite.appendChild(row);
+  });
+  const sum=document.createElement('div');sum.className='tsum';sum.style.color=passed===TESTS.length?'var(--green)':'var(--red)';sum.textContent=passed+' / '+TESTS.length+' passed';suite.appendChild(sum);
+  const sc=document.getElementById('tscore');sc.textContent=passed+'/'+TESTS.length;sc.style.color=passed===TESTS.length?'var(--green)':'var(--red)';
+}
+
+/* Downloads */
+const EXAMPLES=[
+  {name:'C Ionian (Major)',root:'C',mode:'ionian',notes:[]},
+  {name:'G Dorian',root:'G',mode:'dorian',notes:[67,69,71]},
+  {name:'D Mixolydian',root:'D',mode:'mixolydian',notes:[]},
+  {name:'A Aeolian (Minor)',root:'A',mode:'aeolian',notes:[69,72,76]},
+  {name:'E Phrygian',root:'E',mode:'phrygian',notes:[]},
+  {name:'F# Locrian',root:'F#',mode:'locrian',notes:[]},
+];
+const dlg=document.getElementById('dlgrid');
+EXAMPLES.forEach(ex=>{
+  const doc={gcis:'1.0',created:new Date().toISOString(),title:ex.name,author:'Benjamin Ryan',app:{name:'KCM Console',version:'0.8.0',url:'https://console.keyscodesandmodes.com'},state:{root:ex.root,mode:ex.mode,scale:MODES[ex.mode].i,activeNotes:ex.notes},history:[]};
+  const notes=bn(ex.root,MODES[ex.mode].i);
+  const card=document.createElement('div');card.className='dl-card';
+  card.innerHTML=`<div class="dli">📄</div><div class="dln">${ex.name}</div><div style="display:flex;gap:3px;flex-wrap:wrap;">${notes.map(n=>`<span style="width:21px;height:21px;border-radius:4px;background:${nc(n)};color:${ink(n)};display:inline-flex;align-items:center;justify-content:center;font-size:.54rem;font-weight:700;font-family:var(--fd);">${n}</span>`).join('')}</div><div class="dlt">${ex.root} ${ex.mode} · .gcis</div>`;
+  card.onclick=()=>{
+    const blob=new Blob([JSON.stringify(doc,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');
+    a.href=url;a.download=ex.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.gcis';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+  dlg.appendChild(card);
+});
+
+/* Wire UI */
+document.getElementById('vbtn').addEventListener('click',()=>{const v=document.getElementById('ji').value.trim();if(!v){alert('Paste a .gcis JSON document first.');return;}renderResults(v);});
+document.getElementById('cbtn').addEventListener('click',()=>{document.getElementById('ji').value='';document.getElementById('rbody').innerHTML='<div class="rempty">Drop a .gcis file or paste JSON<br>to see the diagnostic readout.</div>';});
+document.getElementById('ji').addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')renderResults(e.target.value.trim());});
+document.getElementById('fi').addEventListener('change',function(){const f=this.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById('ji').value=e.target.result;renderResults(e.target.result);};r.readAsText(f);this.value='';});
+const dz=document.getElementById('dz');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');const f=e.dataTransfer.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{document.getElementById('ji').value=ev.target.result;renderResults(ev.target.result);};r.readAsText(f);});
+
+runTests();
+</script>
+</body>
+</html>
